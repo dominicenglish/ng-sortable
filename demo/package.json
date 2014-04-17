@@ -1,0 +1,7 @@
+{
+    "name": "ng-sortable-demo",
+    "dependencies": {
+        "express": "latest",
+        "jade": "latest"
+    }
+}

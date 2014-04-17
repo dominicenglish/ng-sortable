@@ -1,0 +1,19 @@
+{
+  "name": "ng-sortable",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dominicenglish/ng-sortable",
+  "authors": [
+    "Dominic English <dominic.b.english@gmail.com>"
+  ],
+  "description": "Angular module to enable drag and drop sorting. Works on touch devices.",
+  "keywords": [
+    "angular",
+    "sort",
+    "drag",
+    "drop"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "Sortable": "https://github.com/RubaXa/Sortable.git"
+  }
+}

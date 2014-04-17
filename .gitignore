@@ -1,0 +1,3 @@
+*.sublime*
+bower_components
+demo/node_modules
