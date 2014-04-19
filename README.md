@@ -1,7 +1,7 @@
 # ng-sortable
 ===========
 
-Angular directive to enable drag and drop sorting. Works on touch devices. Utilises https://github.com/RubaXa/Sortable
+Angular directive to enable drag and drop sorting for ng-repeat. Works on touch devices. Utilises https://github.com/RubaXa/Sortable
 
 ## Install
 Clone files from github or install with bower
@@ -21,25 +21,19 @@ angular.module('myApp', ['de.ng-sortable']);
 ```
 
 ## Usage
-Simply add the `drag-sort` directive to the list parent element
+Two basic steps:
+- Add the `ng-sortable` directive to the list parent element and assign it the array you plan to loop over.
+- Add an `ng-sortable-pos` attribute to each child element which matches its array index.
 ```html
-<div class="list-container" drag-sort>
-    <div class="list-item"></div>
-    <div class="list-item"></div>
+<div class="list-container" ng-sortable="items">
+    <div class="list-item" ng-repeat="item in items" ng-sortable-pos="{{$index}}">{{item}}</div>
 </div>
 ```
 
-If you are using `ng-repeat` to output an array of items you can also an array reference to the `drag-sort` directive. The directive will then take car of updating the array order after each order change.
+There is an optional `order-changed` method that will be run after a change has been completed.
 ```html
-<div class="list-container" drag-sort="items">
-    <div class="list-item" ng-repeat="item in items">{{item}}</div>
-</div>
-```
-
-There is an optional `onUpdate` method that will be run after order updates are complete.
-```html
-<div class="list-container" drag-sort="items" on-update="myOnUpdateMethod()">
-    <div class="list-item" ng-repeat="item in items">{{item}}</div>
+<div class="list-container" ng-sortable="items" order-changed="myOnUpdateMethod()">
+    <div class="list-item" ng-repeat="item in items" ng-sortable-pos="{{$index}}">{{item}}</div>
 </div>
 ```
 
