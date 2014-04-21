@@ -11,32 +11,69 @@
 }(angular || null, Sortable || null, function(angular, Sortable) {
     var app = angular.module('de.ng-sortable', []);
 
-    app.directive('ngSortable', [function() {
+    app.directive('ngSortable', ['$parse', '$timeout', function($parse, $timeout) {
         return {
             scope: {
                 'itemArray': '=ngSortable',
-                'listItem': '@',
-                'orderChanged': '&'
+                'listItemSelector': '@ngSortableItemSelector',
+                'orderChanged': '&ngSortableOnChange'
             },
             link: function(scope, element, attrs) {
-                scope.container = element;
-                var sort = new Sortable(element[0], {
-                    draggable: scope.listItem,
-                    onUpdate: function(event) {
+                var container = element,
+                    originalContainerContent,
+                    sort,
+                    slice = Array.prototype.slice;
 
-                        var element = event.item;
-                        var originalPosition = angular.element(element).attr('ng-sortable-pos');
-                        var slice = Array.prototype.slice;
-                        var elementList = slice.call(scope.container.children());
-                        var newPosition = elementList.indexOf(element);
-                        var itemArrayClone = scope.itemArray.slice();
-                        var movedItem = itemArrayClone.splice(originalPosition, 1)[0];
-                        itemArrayClone.splice(newPosition, 0, movedItem);
-                        scope.itemArray = itemArrayClone;
-                        scope.$apply();
-                        scope.orderChanged();
-                    }
+                // Create rubaxa sortable list
+                sort = new Sortable(element[0], {
+                    draggable: scope.listItemSelector,
+                    onUpdate: onUpdate
                 });
+
+                // Events for when a drag begins
+                container
+                    .on('mousedown', onGrab)
+                    .on('touchstart', onGrab)
+                    .on('selectstart', onGrab);
+
+                // When a drag event is begun
+                function onGrab(event) {
+                    // Save the current state of the list
+                    originalContainerContent = container.contents();
+                }
+
+                // When the list order is updated
+                function onUpdate(event) {
+                    // Get the item that was clicked on
+                    var clickedItem = angular.element(event.item);
+
+                    // Get the Angular scope attached to the clicked element
+                    var itemScope = clickedItem.scope();
+
+                    // Get the original position of the dragged element
+                    var originalPosition = itemScope.$index;
+
+                    // Get the current order of dom nodes
+                    var elementList = slice.call(container.children());
+
+                    // Get the new position of the dragged element
+                    var newPosition = elementList.indexOf(clickedItem[0]);
+
+                    // Reset position of all dom elements (so ng-repeat's comments
+                    // don't get broken). Note that append works here because the
+                    // appended elements are references and so pull the re-ordered
+                    // elements back into the original order.
+                    container.append(originalContainerContent);
+
+                    scope.$apply(function() {
+                        // Adjust ng-repeat's array to match the drag changes
+                        var movedItem = scope.itemArray.splice(originalPosition, 1)[0];
+                        scope.itemArray.splice(newPosition, 0, movedItem);
+                    });
+
+                    // Call the user provided on change method
+                    scope.orderChanged();
+                }
             }
         };
     }]);

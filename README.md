@@ -23,17 +23,17 @@ angular.module('myApp', ['de.ng-sortable']);
 ## Usage
 Two basic steps:
 - Add the `ng-sortable` directive to the list parent element and assign it the array you plan to loop over.
-- Add an `ng-sortable-pos` attribute to each child element which matches its array index.
+- Add an `ng-sortable-item-selector` attribute to the list parent and provide a selector for your child elements.
 ```html
-<div class="list-container" ng-sortable="items">
-    <div class="list-item" ng-repeat="item in items" ng-sortable-pos="{{$index}}">{{item}}</div>
+<div class="list-container" ng-sortable="items" ng-sortable-item-selector=".list-item">
+    <div class="list-item" ng-repeat="item in items">{{item}}</div>
 </div>
 ```
 
-There is an optional `order-changed` method that will be run after a change has been completed.
+There is an optional `ng-sortable-on-change` method that will be run after a change in order has been completed.
 ```html
-<div class="list-container" ng-sortable="items" order-changed="myOnUpdateMethod()">
-    <div class="list-item" ng-repeat="item in items" ng-sortable-pos="{{$index}}">{{item}}</div>
+<div class="list-container" ng-sortable="items" ng-sortable-item-selector=".list-item" ng-sortable-on-change="myOnChangeMethod()">
+    <div class="list-item" ng-repeat="item in items">{{item}}</div>
 </div>
 ```
 

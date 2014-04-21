@@ -17,8 +17,8 @@
     </head>
     <body ng-controller="sortableController">
 
-        <div ng-sortable="items" class="list">
-            <div class="item" position="{{$index}}" ng-repeat="item in items">{{item}}</div>
+        <div class="list" ng-sortable="items" ng-sortable-item-selector=".item" ng-sortable-on-change="orderChanged()">
+            <div class="item" ng-repeat="item in items">{{item}}</div>
         </div>
 
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
